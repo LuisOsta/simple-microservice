@@ -1,13 +1,13 @@
 version: "3"
 services:
-  user-service:
+  profile-service:
     restart: always
     build:
-      context: ./user-service
+      context: ./profile-service
       dockerfile: Dockerfile.dev
     volumes:
-      - ./user-service:/app
-    env_file: ./user-service/.env.development
+      - ./profile-service:/app
+    env_file: ./profile-service/.env.development
   auth-service:
     restart: always
     build:
