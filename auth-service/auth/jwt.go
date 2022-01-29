@@ -1,6 +1,8 @@
 package auth
 
 import (
+	"log"
+	"net/http"
 	"strings"
 
 	"github.com/auth-service/config"
@@ -32,18 +34,26 @@ func isTokenValid(tokenString string) bool {
 
 // Checks the AUTH_HEADER for a valid token, parses the Bearer token from the value of the header. Then verifies whether or not its valid.
 func CheckAuthentication(c *gin.Context) {
-
-	if c.GetHeader(AUTH_HEADER) == "" {
-		c.JSON(401, gin.H{"error": "Unauthorized"})
+	tokenString := c.GetHeader(AUTH_HEADER)
+	tokenString = strings.TrimSpace(tokenString)
+	if tokenString == "" {
+		log.Printf("No token found in request\n")
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		c.Abort()
 		return
 	}
+	tokenParts := strings.Split(tokenString, " ")
 
-	rawToken := strings.Split(c.GetHeader(AUTH_HEADER), " ")[1]
-	hasPermission := isTokenValid(rawToken)
-
+	if tokenParts[0] != "Bearer" {
+		log.Printf("Invalid token format\n")
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		c.Abort()
+		return
+	}
+	hasPermission := isTokenValid(tokenParts[1])
 	if !hasPermission {
-		c.JSON(401, gin.H{"error": "Unauthorized"})
+		log.Printf("Invalid token: %s\n", tokenParts[1])
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		c.Abort()
 	} else {
 		c.Next()
