@@ -4,8 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const COLLECTION_NAME = "auth"
-
 type HandleLoginRequestBody struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
