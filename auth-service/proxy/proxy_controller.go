@@ -1,16 +1,23 @@
 package proxy
 
 import (
+	"io"
 	"io/ioutil"
 	"log"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
+type ServiceRequestSender = func(serviceEndpoint string, method string, body io.Reader) (*http.Response, error)
+type Proxy struct {
+	SendServiceRequest ServiceRequestSender
+}
+
 // gets the prefix of the path, determines if the path is to a supported service
 // If its supported, then it will return the service name and the path without the prefix
 // It will then send a request using the Service Endpoint and the path
-func HandleProxyRequest(c *gin.Context) {
+func (p *Proxy) HandleProxyRequest(c *gin.Context) {
 	serviceName, servicePath := getServiceNameAndPath(c.Request.URL.Path)
 	service, err := getService(serviceName)
 	if err != nil {
@@ -19,7 +26,7 @@ func HandleProxyRequest(c *gin.Context) {
 		return
 	}
 
-	res, err := SendServiceRequest(service.Endpoint+servicePath, c.Request.Method, c.Request.Body)
+	res, err := p.SendServiceRequest(service.Endpoint+servicePath, c.Request.Method, c.Request.Body)
 
 	if err != nil {
 		log.Printf("Error sending request to service %s: %s\n", serviceName, err.Error())

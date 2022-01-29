@@ -22,8 +22,9 @@ func ConfigureRouter() *gin.Engine {
 }
 
 func createProxyGroup(router *gin.Engine) {
+	p := proxy.Proxy{SendServiceRequest: proxy.SendServiceRequest}
 	router.Use(auth.CheckAuthentication)
-	router.NoRoute(proxy.HandleProxyRequest)
+	router.NoRoute(p.HandleProxyRequest)
 }
 
 func createAuthGroup(router *gin.Engine) {
