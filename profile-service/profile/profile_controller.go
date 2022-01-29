@@ -1,14 +1,29 @@
 package profile
 
-import "github.com/gin-gonic/gin"
+import (
+	"log"
 
-func HandleCreateCustomer(c *gin.Context) {
-	c.JSON(500, gin.H{
-		"message": "NOT IMPLEMENTED",
-	})
+	"github.com/gin-gonic/gin"
+)
+
+func HandleCreateProfile(c *gin.Context) {
+
+	profile, err := createProfile("placeholder", "placeholder")
+
+	if err != nil {
+		log.Println(err)
+		c.JSON(503, gin.H{
+			"message": "NOT IMPLEMENTED",
+		})
+	} else {
+		c.JSON(200, gin.H{
+			"message": "OK",
+			"data":    profile,
+		})
+	}
 }
 
-func HandleUpdateCustomer(c *gin.Context) {
+func HandleUpdateProfile(c *gin.Context) {
 	c.JSON(503, gin.H{
 		"message": "NOT IMPLEMENTED",
 	})
