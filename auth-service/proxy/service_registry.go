@@ -12,16 +12,20 @@ type service struct {
 	Endpoint string
 }
 
+// If the service name is not found in the hashmap, then return an error.
+// Otherwise return the service object.
 func getService(serviceName string) (service, error) {
 
-	for _, service := range getServices() {
-		if service.Name == serviceName {
-			return service, nil
-		}
+	services := getServices()
+
+	if services[serviceName] == (service{}) {
+		return service{}, fmt.Errorf("service %s not found", serviceName)
+	} else {
+		return services[serviceName], nil
 	}
-	return service{}, fmt.Errorf("%s service not found", serviceName)
 }
 
+// Uses the full request path to determine the service that it is trying to target and the endpoint for that service that it is trying to reach.
 func getServiceNameAndPath(path string) (string, string) {
 	for _, service := range getServices() {
 		prefix := "/" + service.Name
@@ -32,7 +36,11 @@ func getServiceNameAndPath(path string) (string, string) {
 	return "", path
 }
 
-func getServices() [1]service {
-	services := [...]service{{Name: "profile", Endpoint: config.GetConfiguration().USER_SERVICE_ENDPOINT}}
-	return services
+func getServices() map[string]service {
+	return map[string]service{
+		"profile": {
+			Name:     "profile",
+			Endpoint: config.GetConfiguration().USER_SERVICE_ENDPOINT,
+		},
+	}
 }
