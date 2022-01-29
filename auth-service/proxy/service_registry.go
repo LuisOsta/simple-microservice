@@ -1,7 +1,8 @@
 package proxy
 
 import (
-	"errors"
+	"fmt"
+	"log"
 	"strings"
 
 	"github.com/auth-service/config"
@@ -12,22 +13,27 @@ type service struct {
 	Endpoint string
 }
 
-var services = [...]service{{Name: "user", Endpoint: config.GetConfiguration().USER_SERVICE_ENDPOINT}}
-
 func getService(serviceName string) (service, error) {
-	for _, service := range services {
+
+	for _, service := range getServices() {
 		if service.Name == serviceName {
 			return service, nil
 		}
 	}
-	return service{}, errors.New("service not found")
+	return service{}, fmt.Errorf("%s service not found", serviceName)
 }
 
 func getServiceNameAndPath(path string) (string, string) {
-	for _, service := range services {
-		if strings.HasPrefix(path, "/"+service.Name) {
-			return service.Name, path[len(service.Name)+1:]
+	log.Println("path: ", path)
+	for _, service := range getServices() {
+		if strings.HasPrefix(path, service.Name) {
+			return service.Name, "/" + strings.TrimPrefix(path, "/"+service.Name)
 		}
 	}
 	return "", path
+}
+
+func getServices() [1]service {
+	services := [...]service{{Name: "user", Endpoint: config.GetConfiguration().USER_SERVICE_ENDPOINT}}
+	return services
 }

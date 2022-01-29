@@ -32,7 +32,14 @@ func isTokenValid(tokenString string) bool {
 
 // Checks the AUTH_HEADER for a valid token, parses the Bearer token from the value of the header. Then verifies whether or not its valid.
 func CheckAuthentication(c *gin.Context) {
-	rawToken := strings.Split(c.GetHeader(AUTH_HEADER), "")[1]
+
+	if c.GetHeader(AUTH_HEADER) == "" {
+		c.JSON(401, gin.H{"error": "Unauthorized"})
+		c.Abort()
+		return
+	}
+
+	rawToken := strings.Split(c.GetHeader(AUTH_HEADER), " ")[1]
 	hasPermission := isTokenValid(rawToken)
 
 	if !hasPermission {
