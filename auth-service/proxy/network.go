@@ -6,10 +6,10 @@ import (
 	"net/http"
 )
 
-func SendServiceRequest(serviceEndpoint string, path string, method string, body io.Reader) (*http.Response, error) {
-	log.Printf("Sending %s request to service %s\n at path %s", method, serviceEndpoint, path)
+func SendServiceRequest(serviceEndpoint string, method string, body io.Reader) (*http.Response, error) {
+	log.Printf("Sending %s request to service %s\n", method, serviceEndpoint)
 	client := &http.Client{}
-	req, err := http.NewRequest("GET", serviceEndpoint+path, body)
+	req, err := http.NewRequest(method, serviceEndpoint, body)
 
 	if err != nil {
 		return nil, err

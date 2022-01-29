@@ -1,6 +1,7 @@
 package proxy
 
 import (
+	"io/ioutil"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -19,7 +20,7 @@ func HandleProxyRequest(c *gin.Context) {
 		return
 	}
 
-	res, err := SendServiceRequest(service.Endpoint, servicePath, c.Request.Method, c.Request.Body)
+	res, err := SendServiceRequest(service.Endpoint+servicePath, c.Request.Method, c.Request.Body)
 
 	if err != nil {
 		log.Printf("Error sending request to service %s: %s\n", serviceName, err.Error())
@@ -27,7 +28,13 @@ func HandleProxyRequest(c *gin.Context) {
 		return
 	}
 
-	c.JSON(500, gin.H{
-		"message": res.Body,
-	})
+	body, err := ioutil.ReadAll(res.Body)
+
+	if err != nil {
+		log.Printf("Error reading response from service %s: %s\n", serviceName, err.Error())
+		c.JSON(500, gin.H{"error": "Internal server error"})
+		return
+	}
+
+	c.Data(res.StatusCode, res.Header.Get("Content-Type"), body)
 }
