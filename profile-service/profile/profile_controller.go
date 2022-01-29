@@ -9,6 +9,7 @@ import (
 type createProfileBody struct {
 	Address string `json:"address"`
 	Phone   string `json:"phone"`
+	UserId  string `json:"userId"`
 }
 
 func HandleCreateProfile(c *gin.Context) {
@@ -19,7 +20,7 @@ func HandleCreateProfile(c *gin.Context) {
 		c.JSON(400, gin.H{"error": "invalid request"})
 		return
 	}
-	profile, err := createProfile(body.Address, body.Phone)
+	profile, err := createProfile(body.Address, body.Phone, body.UserId)
 
 	if err != nil {
 		log.Println(err)
@@ -31,8 +32,27 @@ func HandleCreateProfile(c *gin.Context) {
 	}
 }
 
+type updateProfileBody struct {
+	Address string `json:"address"`
+	Phone   string `json:"phone"`
+}
+
 func HandleUpdateProfile(c *gin.Context) {
-	c.JSON(503, gin.H{
-		"message": "NOT IMPLEMENTED",
-	})
+	uid := c.Param("userId")
+	var body updateProfileBody
+	if err := c.BindJSON(&body); err != nil {
+		log.Println(err)
+		c.JSON(400, gin.H{"error": "invalid request"})
+		return
+	}
+	profile, err := updateProfile(uid, ProfileDocument{Address: body.Address, Phone: body.Phone})
+
+	if err != nil {
+		log.Println(err)
+		c.JSON(503, gin.H{
+			"error": err.Error(),
+		})
+	} else {
+		c.JSON(200, profile)
+	}
 }
