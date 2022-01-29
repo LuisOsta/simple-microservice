@@ -7,7 +7,7 @@ import (
 )
 
 func SendServiceRequest(serviceEndpoint string, method string, body io.Reader) (*http.Response, error) {
-	log.Printf("Sending %s request to service %s\n", method, serviceEndpoint)
+	log.Printf("Sending %s request to endpoint %s\n", method, serviceEndpoint)
 	client := &http.Client{}
 	req, err := http.NewRequest(method, serviceEndpoint, body)
 
