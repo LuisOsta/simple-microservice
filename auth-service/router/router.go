@@ -23,7 +23,7 @@ func ConfigureRouter() *gin.Engine {
 
 func createProfileGroup(router *gin.Engine) {
 	profileGroup := router.Group("/user")
-
+	profileGroup.Use(auth.CheckAuthentication)
 	profileGroup.Any("/:path", profile.HandleProfileRequest)
 }
 
