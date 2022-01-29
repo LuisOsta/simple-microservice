@@ -1,16 +1,5 @@
 version: "3"
 services:
-  mongo:
-    image: "mongo:5.0"
-    ports:
-      - "27017:27017"
-  dbseed:
-    build:
-      context: ./mongo
-      dockerfile: Dockerfile.dev
-    links:
-      - mongo
-    env_file: ./mongo/.env.development
   user-service:
     restart: always
     build:
