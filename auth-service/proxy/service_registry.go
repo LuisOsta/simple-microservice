@@ -35,6 +35,6 @@ func getServiceNameAndPath(path string) (string, string) {
 }
 
 func getServices() [1]service {
-	services := [...]service{{Name: "user", Endpoint: config.GetConfiguration().USER_SERVICE_ENDPOINT}}
+	services := [...]service{{Name: "profile", Endpoint: config.GetConfiguration().USER_SERVICE_ENDPOINT}}
 	return services
 }
