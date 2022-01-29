@@ -22,9 +22,8 @@ func ConfigureRouter() *gin.Engine {
 }
 
 func createProxyGroup(router *gin.Engine) {
-	profileGroup := router.Group("/")
-	profileGroup.Use(auth.CheckAuthentication)
-	profileGroup.Any("/:path", proxy.HandleProxyRequest)
+	router.Use(auth.CheckAuthentication)
+	router.NoRoute(proxy.HandleProxyRequest)
 }
 
 func createAuthGroup(router *gin.Engine) {

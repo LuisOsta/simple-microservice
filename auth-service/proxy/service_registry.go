@@ -2,6 +2,7 @@ package proxy
 
 import (
 	"fmt"
+	"log"
 	"strings"
 
 	"github.com/auth-service/config"
@@ -23,9 +24,11 @@ func getService(serviceName string) (service, error) {
 }
 
 func getServiceNameAndPath(path string) (string, string) {
+	log.Println("path: ", path)
 	for _, service := range getServices() {
-		if strings.HasPrefix(path, service.Name) {
-			return service.Name, "/" + strings.TrimPrefix(path, service.Name)
+		prefix := "/" + service.Name
+		if strings.HasPrefix(path, prefix) {
+			return service.Name, strings.TrimPrefix(path, prefix)
 		}
 	}
 	return "", path

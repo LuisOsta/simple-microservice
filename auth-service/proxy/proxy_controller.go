@@ -11,8 +11,7 @@ import (
 // If its supported, then it will return the service name and the path without the prefix
 // It will then send a request using the Service Endpoint and the path
 func HandleProxyRequest(c *gin.Context) {
-	serviceName, servicePath := getServiceNameAndPath(c.Param("path"))
-
+	serviceName, servicePath := getServiceNameAndPath(c.Request.URL.Path)
 	service, err := getService(serviceName)
 	if err != nil {
 		log.Printf("Attempted to request path %s for invalid service %s\n", servicePath, serviceName)
