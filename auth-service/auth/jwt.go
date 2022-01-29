@@ -49,10 +49,7 @@ func CheckAuthentication(c *gin.Context) {
 		log.Printf("Invalid token format\n")
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		c.Abort()
-		return
-	}
-	hasPermission := isTokenValid(tokenParts[1])
-	if !hasPermission {
+	} else if !isTokenValid(tokenParts[1]) {
 		log.Printf("Invalid token: %s\n", tokenParts[1])
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		c.Abort()
