@@ -28,6 +28,7 @@ type HandleProxyTest struct {
 	method                 string
 	body                   string
 	service_request_sender ServiceRequestSender
+	expectedStatusCode     int
 }
 
 func TestHandleProxyRequest(t *testing.T) {
@@ -38,24 +39,42 @@ func TestHandleProxyRequest(t *testing.T) {
 			method:                 "POST",
 			body:                   "{}",
 			service_request_sender: mock_successful_send_service_request,
+			expectedStatusCode:     200,
 		},
 		{
 			path:                   "/profile",
 			method:                 "POST",
 			body:                   "{}",
 			service_request_sender: mock_failed_send_service_request,
+			expectedStatusCode:     500,
 		},
 		{
 			path:                   "/profile/12345",
 			method:                 "PUT",
 			body:                   "{}",
 			service_request_sender: mock_successful_send_service_request,
+			expectedStatusCode:     200,
 		},
 		{
 			path:                   "/profile/12345",
 			method:                 "PUT",
 			body:                   "{}",
 			service_request_sender: mock_failed_send_service_request,
+			expectedStatusCode:     500,
+		},
+		{
+			path:                   "/location",
+			method:                 "POST",
+			body:                   "{}",
+			service_request_sender: mock_successful_send_service_request,
+			expectedStatusCode:     404,
+		},
+		{
+			path:                   "/location",
+			method:                 "POST",
+			body:                   "{}",
+			service_request_sender: mock_failed_send_service_request,
+			expectedStatusCode:     404,
 		},
 	}
 
@@ -69,10 +88,36 @@ func TestHandleProxyRequest(t *testing.T) {
 		c.Request.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 		proxy.HandleProxyRequest(c)
+
+		if w.Code != test.expectedStatusCode {
+			t.Errorf("Expected status code %d, got %d", test.expectedStatusCode, w.Code)
+		}
 	}
 
 }
 
-func BenchmarkHandleProxyRequest(t *testing.B) {
+func mock_benched_send_service_request(serviceEndpoint string, method string, body io.Reader) (*http.Response, error) {
+	return &http.Response{
+		StatusCode: 200,
+		Body:       ioutil.NopCloser(strings.NewReader("{}")),
+	}, nil
+}
 
+func BenchmarkHandleProxyRequest(b *testing.B) {
+	gin.SetMode(gin.ReleaseMode)
+	for i := 0; i < b.N; i++ {
+		proxy := Proxy{
+			SendServiceRequest: mock_benched_send_service_request,
+		}
+		w := httptest.NewRecorder()
+		c, _ := gin.CreateTestContext(w)
+		c.Request, _ = http.NewRequest("POST", "/profile", io.Reader(strings.NewReader("{}")))
+		c.Request.Header.Set("Content-Type", "application/json; charset=utf-8")
+
+		proxy.HandleProxyRequest(c)
+
+		if w.Code != 200 {
+			b.Errorf("Expected status code %d, got %d", 200, w.Code)
+		}
+	}
 }
