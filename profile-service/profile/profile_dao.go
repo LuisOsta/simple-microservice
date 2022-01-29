@@ -8,6 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 const COLLECTION_NAME = "profile"
@@ -56,10 +57,10 @@ func updateProfile(uid string, p ProfileDocument) (ProfileDocument, error) {
 
 	log.Printf("About to update profile with id: %s", oid.Hex())
 
-	err = coll.FindOneAndUpdate(context.TODO(), bson.D{{Key: "_id", Value: oid}},
+	err = coll.FindOneAndUpdate(context.TODO(), bson.D{{Key: "userId", Value: oid}},
 		bson.D{{Key: "$set", Value: bson.D{
 			{Key: "address", Value: p.Address},
-			{Key: "phone", Value: p.Phone}}}}).Decode(&newProfile)
+			{Key: "phone", Value: p.Phone}}}}, options.FindOneAndUpdate().SetReturnDocument(options.After)).Decode(&newProfile)
 
 	if err != nil {
 		return ProfileDocument{}, err

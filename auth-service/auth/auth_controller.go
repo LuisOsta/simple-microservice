@@ -19,7 +19,6 @@ type HandleLoginRequestBody struct {
 func HandleLogin(c *gin.Context) {
 
 	var requestBody HandleLoginRequestBody
-	c.BindJSON(&requestBody)
 	if err := c.BindJSON(&requestBody); err != nil {
 		log.Println(err)
 		c.JSON(400, gin.H{"error": "invalid request"})
