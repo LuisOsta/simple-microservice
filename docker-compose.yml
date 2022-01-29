@@ -1,0 +1,31 @@
+version: "3"
+services:
+  mongo:
+    image: "mongo:5.0"
+    ports:
+      - "27017:27017"
+  dbseed:
+    build:
+      context: ./mongo
+      dockerfile: Dockerfile.dev
+    links:
+      - mongo
+    env_file: ./mongo/.env.development
+  user-service:
+    restart: always
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./user-service:/app
+    env_file: ./user-service/.env.development
+  auth-service:
+    restart: always
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile.dev
+    ports: 
+      - "8080:8080"
+    volumes:
+      - ./auth-service:/app
+    env_file: ./auth-service/.env.development

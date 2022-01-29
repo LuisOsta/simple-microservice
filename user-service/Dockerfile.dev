@@ -1,0 +1,6 @@
+FROM golang:1.16.3-alpine AS build
+WORKDIR /src
+COPY . .
+RUN go mod download
+
+CMD ["go", "run", "main.go"]
