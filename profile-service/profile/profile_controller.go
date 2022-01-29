@@ -45,7 +45,7 @@ func HandleUpdateProfile(c *gin.Context) {
 		c.JSON(400, gin.H{"error": "invalid request"})
 		return
 	}
-	profile, err := updateProfile(uid, ProfileDocument{Address: body.Address, Phone: body.Phone})
+	profile, err := updateProfile(uid, updatePayload(body))
 
 	if err != nil {
 		log.Println(err)

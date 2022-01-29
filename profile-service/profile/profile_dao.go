@@ -46,7 +46,12 @@ func createProfile(address string, phone string, uid string) (ProfileDocument, e
 	return ProfileDocument{ID: res.InsertedID.(primitive.ObjectID), Address: address, Phone: phone, UserID: oid}, nil
 }
 
-func updateProfile(uid string, p ProfileDocument) (ProfileDocument, error) {
+type updatePayload struct {
+	Address string `bson:"address,omitempty"`
+	Phone   string `bson:"phone,omitempty"`
+}
+
+func updateProfile(uid string, p updatePayload) (ProfileDocument, error) {
 	coll := getCollection()
 	var newProfile ProfileDocument
 	oid, err := primitive.ObjectIDFromHex(uid)
@@ -58,9 +63,7 @@ func updateProfile(uid string, p ProfileDocument) (ProfileDocument, error) {
 	log.Printf("About to update profile with id: %s", oid.Hex())
 
 	err = coll.FindOneAndUpdate(context.TODO(), bson.D{{Key: "userId", Value: oid}},
-		bson.D{{Key: "$set", Value: bson.D{
-			{Key: "address", Value: p.Address},
-			{Key: "phone", Value: p.Phone}}}}, options.FindOneAndUpdate().SetReturnDocument(options.After)).Decode(&newProfile)
+		bson.D{{Key: "$set", Value: p}}, options.FindOneAndUpdate().SetReturnDocument(options.After)).Decode(&newProfile)
 
 	if err != nil {
 		return ProfileDocument{}, err
