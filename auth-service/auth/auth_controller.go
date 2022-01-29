@@ -29,6 +29,14 @@ func HandleLogin(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, credentials)
+	token, err := createAuthToken(credentials.ID.Hex())
 
+	if err != nil {
+		println(err.Error())
+		c.JSON(500, gin.H{"error": "Internal server error"})
+		return
+	}
+
+	c.Header(AUTH_HEADER, "Bearer "+token)
+	c.JSON(200, credentials)
 }

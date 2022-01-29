@@ -2,6 +2,7 @@ package auth
 
 import (
 	"context"
+	"log"
 
 	"github.com/auth-service/db"
 	"go.mongodb.org/mongo-driver/bson"
@@ -9,20 +10,27 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func getCollection() *mongo.Collection {
-	database := db.GetDatabase()
-	return database.Collection(COLLECTION_NAME)
+type AuthDocument struct {
+	ID       primitive.ObjectID `bson:"_id,omitempty"`
+	Username string             `bson:"username"`
+	Password string             `bson:"password"`
 }
 
-func getUserByCredentials(username string, password string) (bson.D, error) {
+func getCollection() *mongo.Collection {
+	db := db.GetDatabase()
+	return db.Collection(COLLECTION_NAME)
+}
 
-	collection := getCollection()
+func getUserByCredentials(username string, password string) (AuthDocument, error) {
 
-	var credentials bson.D
-	err := collection.FindOne(context.TODO(), bson.D{primitive.E{Key: "username", Value: username}, primitive.E{Key: "password", Value: password}}).Decode(&credentials)
+	coll := getCollection()
+
+	var credentials AuthDocument
+	err := coll.FindOne(context.TODO(), bson.D{primitive.E{Key: "username", Value: username}, primitive.E{Key: "password", Value: password}}).Decode(&credentials)
 
 	if err != nil {
-		return nil, err
+		log.Printf("Error finding user with credentials: %s", err.Error())
+		return AuthDocument{}, err
 	}
 
 	return credentials, nil
