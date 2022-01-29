@@ -1,6 +1,8 @@
 package auth
 
 import (
+	"log"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -18,11 +20,15 @@ func HandleLogin(c *gin.Context) {
 
 	var requestBody HandleLoginRequestBody
 	c.BindJSON(&requestBody)
-
+	if err := c.BindJSON(&requestBody); err != nil {
+		log.Println(err)
+		c.JSON(400, gin.H{"error": "invalid request"})
+		return
+	}
 	credentials, err := getUserByCredentials(requestBody.Username, requestBody.Password)
 
 	if err != nil {
-		println(err.Error())
+		log.Println(err.Error())
 		c.JSON(401, gin.H{"error": "Invalid credentials"})
 		return
 	}
@@ -30,7 +36,7 @@ func HandleLogin(c *gin.Context) {
 	token, err := createAuthToken(credentials.ID.Hex())
 
 	if err != nil {
-		println(err.Error())
+		log.Println(err.Error())
 		c.JSON(500, gin.H{"error": "Internal server error"})
 		return
 	}

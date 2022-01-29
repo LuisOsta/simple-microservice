@@ -6,20 +6,28 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type createProfileBody struct {
+	Address string `json:"address"`
+	Phone   string `json:"phone"`
+}
+
 func HandleCreateProfile(c *gin.Context) {
 
-	profile, err := createProfile("placeholder", "placeholder")
+	var body createProfileBody
+	if err := c.BindJSON(&body); err != nil {
+		log.Println(err)
+		c.JSON(400, gin.H{"error": "invalid request"})
+		return
+	}
+	profile, err := createProfile(body.Address, body.Phone)
 
 	if err != nil {
 		log.Println(err)
 		c.JSON(503, gin.H{
-			"message": "NOT IMPLEMENTED",
+			"error": err.Error(),
 		})
 	} else {
-		c.JSON(200, gin.H{
-			"message": "OK",
-			"data":    profile,
-		})
+		c.JSON(200, profile)
 	}
 }
 
