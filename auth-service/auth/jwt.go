@@ -33,6 +33,7 @@ func isTokenValid(tokenString string) bool {
 }
 
 // Checks the AUTH_HEADER for a valid token, parses the Bearer token from the value of the header. Then verifies whether or not its valid.
+// We want to make sure that only Bearer tokens generated with the appropriate algorithm and secret are allowed to continue.
 func CheckAuthentication(c *gin.Context) {
 	tokenString := c.GetHeader(AUTH_HEADER)
 	tokenString = strings.TrimSpace(tokenString)
