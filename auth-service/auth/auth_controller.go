@@ -17,11 +17,9 @@ type Auth struct {
 	GetUserByCredentials CredentialRetriever
 }
 
-// gets the username and password from the request
-// get the collection instance
-// atempt to search for a document in the collection with a matching username and password
-// if the document is found, return the document
-// if the document is not found, return an error
+// Gets the username and password from the request get the collection instance.
+// Attempt to search for a document in the collection with a matching username and password.
+// If the document is found, return the document, If the document is not found, return an error.
 func (a *Auth) HandleLogin(c *gin.Context) {
 
 	var requestBody HandleLoginRequestBody
