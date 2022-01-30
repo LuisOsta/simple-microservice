@@ -53,6 +53,12 @@ func TestHandleCreateProfile(t *testing.T) {
 			profileCreator:     mockFailedProfileCreator,
 			expectedStatusCode: 500,
 		},
+		// should fail bind json
+		{
+			body:               createProfileBody{},
+			profileCreator:     mockSuccessProfileCreator,
+			expectedStatusCode: 400,
+		},
 	}
 
 	for _, test := range tests {
@@ -60,6 +66,10 @@ func TestHandleCreateProfile(t *testing.T) {
 		w := httptest.NewRecorder()
 		c, _ := gin.CreateTestContext(w)
 		body, _ := json.Marshal(test.body)
+
+		if (test.body == createProfileBody{}) {
+			body = []byte("")
+		}
 		c.Request, _ = http.NewRequest("POST", "/", io.Reader(bytes.NewBuffer(body)))
 		c.Request.Header.Set("Content-Type", "application/json; charset=utf-8")
 		p := Profile{
@@ -112,6 +122,11 @@ func TestHandleUpdateProfile(t *testing.T) {
 			profileUpdator:     mockFailedProfileUpdator,
 			expectedStatusCode: 500,
 		},
+		{
+			body:               updateProfileBody{},
+			profileUpdator:     mockSuccessProfileUpdator,
+			expectedStatusCode: 400,
+		},
 	}
 
 	for _, test := range tests {
@@ -119,6 +134,9 @@ func TestHandleUpdateProfile(t *testing.T) {
 		w := httptest.NewRecorder()
 		c, _ := gin.CreateTestContext(w)
 		body, _ := json.Marshal(test.body)
+		if (test.body == updateProfileBody{}) {
+			body = []byte("")
+		}
 		c.Request, _ = http.NewRequest("PUT", "/profile/1234", io.Reader(bytes.NewBuffer(body)))
 		c.Request.Header.Set("Content-Type", "application/json; charset=utf-8")
 		p := Profile{
