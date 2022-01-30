@@ -1,5 +1,5 @@
 # Simple Microservices
-This simple project is an example of a microservice architecture. With the API gateway handling the authentication and routing, and the underlying services handling their respective business logic.
+This simple project is an example of a microservice architecture. With the API gateway handling the authentication and routing, and the underlying service handling the respective business logic.
 
 **Important Note**: In this example the same database cluster is utilized for all services. This is not a good practice, but is done for simplicity.
 
@@ -15,8 +15,7 @@ docker-compose up
 ## Architectural Components
 
 ### Authentication Service
-Serves as an authentication service for the users and as an API Gateway for the other services.
-
+Serves as an authentication service for the users and as an API Gateway for the other services. Utilizes Gin as the request handling layer, MongoDB for data storage and retrieval, and JWT for authentication.
 
 #### Environmental Variables
 The following environmental variables are required for the services:
