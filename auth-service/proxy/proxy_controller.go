@@ -22,7 +22,7 @@ func (p *Proxy) HandleProxyRequest(c *gin.Context) {
 	service, err := getService(serviceName)
 	if err != nil {
 		log.Printf("Attempted to request path %s for invalid service %s\n", servicePath, serviceName)
-		c.JSON(404, gin.H{"error": "Service not found"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "Service not found"})
 		return
 	}
 
@@ -30,7 +30,7 @@ func (p *Proxy) HandleProxyRequest(c *gin.Context) {
 
 	if err != nil {
 		log.Printf("Error sending request to service %s: %s\n", serviceName, err.Error())
-		c.JSON(500, gin.H{"error": "Internal server error"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
 		return
 	}
 
@@ -38,7 +38,7 @@ func (p *Proxy) HandleProxyRequest(c *gin.Context) {
 
 	if err != nil {
 		log.Printf("Error reading response from service %s: %s\n", serviceName, err.Error())
-		c.JSON(500, gin.H{"error": "Internal server error"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
 		return
 	}
 

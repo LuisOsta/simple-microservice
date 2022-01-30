@@ -2,6 +2,7 @@ package auth
 
 import (
 	"log"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -26,14 +27,14 @@ func (a *Auth) HandleLogin(c *gin.Context) {
 	var requestBody HandleLoginRequestBody
 	if err := c.BindJSON(&requestBody); err != nil {
 		log.Println(err)
-		c.JSON(400, gin.H{"error": "invalid request"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request"})
 		return
 	}
 	credentials, err := a.GetUserByCredentials(requestBody.Username, requestBody.Password)
 
 	if err != nil {
 		log.Println(err.Error())
-		c.JSON(401, gin.H{"error": "Invalid credentials"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
 		return
 	}
 
@@ -41,10 +42,10 @@ func (a *Auth) HandleLogin(c *gin.Context) {
 
 	if err != nil {
 		log.Println(err.Error())
-		c.JSON(500, gin.H{"error": "Internal server error"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
 		return
 	}
 
 	c.Header(AUTH_HEADER, "Bearer "+token)
-	c.JSON(200, credentials)
+	c.JSON(http.StatusOK, credentials)
 }
