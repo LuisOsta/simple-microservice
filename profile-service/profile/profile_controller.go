@@ -20,6 +20,8 @@ type Profile struct {
 	UpdateProfile ProfileUpdator
 }
 
+// Marshalls the request JSON body into a createProfileBody struct. Then uses the properties of the struct to call CreateProfile
+// Returns the full created profile document
 func (p *Profile) HandleCreateProfile(c *gin.Context) {
 
 	var body createProfileBody
@@ -45,6 +47,8 @@ type updateProfileBody struct {
 	Phone   string `json:"phone"`
 }
 
+// Marshalls the request JSON body into a updateProfileBody struct. The request body can be partially empty, and only the existant values will be updated.
+// The full profile document after the update is returned.
 func (p *Profile) HandleUpdateProfile(c *gin.Context) {
 	uid := c.Param("userId")
 	var body updateProfileBody
