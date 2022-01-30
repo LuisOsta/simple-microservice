@@ -53,7 +53,7 @@ func TestHandleCreateProfile(t *testing.T) {
 			profileCreator:     mockFailedProfileCreator,
 			expectedStatusCode: 500,
 		},
-		// should fail bind json
+		// Should fail bind json
 		{
 			body:               createProfileBody{},
 			profileCreator:     mockSuccessProfileCreator,

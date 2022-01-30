@@ -20,8 +20,8 @@ type Profile struct {
 	UpdateProfile ProfileUpdator
 }
 
-// Marshalls the request JSON body into a createProfileBody struct. Then uses the properties of the struct to call CreateProfile
-// Returns the full created profile document
+// Marshalls the request JSON body into a createProfileBody struct. Then uses the properties of the struct to call CreateProfile.
+// Returns the full created profile document.
 func (p *Profile) HandleCreateProfile(c *gin.Context) {
 
 	var body createProfileBody
