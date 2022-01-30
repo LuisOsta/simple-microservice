@@ -4,18 +4,22 @@ This simple project is an example of a microservice architecture. With the API g
 **Important Note**: In this example the same database cluster is utilized for all services. This is not a good practice, but is done for simplicity.
 
 ## Getting Started
-
-After starting up the services and database through docker-compose, directly create a user in the `credentials` collection in the MongoDB `auth` database.
-
-Afterwards you'll be able to test and utilize the services through the API endpoint.
+You can startup the services and database through the following command
 ```bash
 docker-compose up
 ```
+
+After starting up the services and database through docker-compose, directly create a user in the `credentials` collection in the MongoDB `auth` database.
+
+Afterwards you'll be able to test and utilize the services through the API endpoint. Just make sure to include the provided Bearer token in the 'Authorization' header for your following requests.
+
 
 ## Architectural Components
 
 ### Authentication Service
 Serves as an authentication service for the users and as an API Gateway for the other services. Utilizes Gin as the request handling layer, MongoDB for data storage and retrieval, and JWT for authentication.
+
+The JWT is provided in the format 'Bearer <token_string>' in the 'Authorization' header of the response to the login request (if successful)
 
 #### Environmental Variables
 The following environmental variables are required for the services:
