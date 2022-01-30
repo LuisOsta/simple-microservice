@@ -4,13 +4,15 @@ This simple project is an example of a microservice architecture. With the API g
 **Important Note**: In this example the same database cluster is utilized for all services. This is not a good practice, but is done for simplicity.
 
 ## Getting Started
+You can startup the services and database through the following command
+```bash
+docker-compose up
+```
 
 After starting up the services and database through docker-compose, directly create a user in the `credentials` collection in the MongoDB `auth` database.
 
 Afterwards you'll be able to test and utilize the services through the API endpoint.
-```bash
-docker-compose up
-```
+
 
 ## Architectural Components
 
