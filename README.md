@@ -27,12 +27,16 @@ The following environmental variables are required for the services:
 
 You can see the local configuration of these secrets in the [auth-service .env.development file](./auth-service/.env.development).
 
+#### Testing
+To run the correctness tests execute `go test ./...` from the root of the [auth-service folder](./auth-service/).
+
+To run the proxy benchmark test execute `go test -benchmem -run=^$ -bench ^BenchmarkHandleProxyRequest$ github.com/auth-service/proxy`. This test is located in the [proxy_controller_test.go file.](./auth-service/proxy/proxy_controller_test.go)
 ### Profile Service
 
 Allows the user to create profiles and to update them. Can only be contacted by the authentication services.
 Utilizes Gin as the request handling layer & MongoDB for data storage and retrieval.
 
-### Environmental Variables
+#### Environmental Variables
 The following environment are required for the service:
 - PORT
 - MONGO_URI
@@ -40,3 +44,6 @@ The following environment are required for the service:
 - DB_NAME
 
 You can see the local configuration of these secrets in the [profile-service .env.development file](./profile-service/.env.development).
+
+#### Testing
+To run the correctness tests execute `go test ./...` from the root of the [profile-service folder](./profile-service/).
