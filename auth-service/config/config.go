@@ -14,7 +14,7 @@ type Configuration struct {
 
 func GetConfiguration() Configuration {
 
-	// best effort attempt to determine whether the execution environment is during testing
+	// Best effort attempt to determine whether the execution environment is during testing
 	if strings.HasSuffix(os.Args[0], ".test") {
 		return Configuration{
 			MONGO_URI:             "mongodb://localhost:27017",

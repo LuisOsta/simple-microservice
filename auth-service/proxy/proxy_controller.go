@@ -14,9 +14,9 @@ type Proxy struct {
 	SendServiceRequest ServiceRequestSender
 }
 
-// Gets the prefix of the path, determines if the path is to a supported service
-// If its supported, then it will return the service name and the path without the prefix
-// It will then send a request using the Service Endpoint and the path
+// Gets the prefix of the path, determines if the path is to a supported service.
+// If its supported, then it will return the service name and the path without the prefix.
+// It will then send a request using the Service Endpoint and the path.
 func (p *Proxy) HandleProxyRequest(c *gin.Context) {
 	serviceName, servicePath := getServiceNameAndPath(c.Request.URL.Path)
 	service, err := getService(serviceName)

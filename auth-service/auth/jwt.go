@@ -18,7 +18,7 @@ func createAuthToken(uid string) (string, error) {
 		"userId": uid,
 	})
 
-	// Sign and get the complete encoded token as a string using the secret
+	// Sign and get the complete encoded token as a string using the secret.
 	tokenString, err := token.SignedString([]byte(config.GetConfiguration().JWT_SECRET))
 
 	return tokenString, err
