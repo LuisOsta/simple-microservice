@@ -1,4 +1,4 @@
-# Simple Microservices
+# Simple Microservice
 This simple project is an example of a microservice architecture. With the API gateway handling the authentication and routing, and the underlying service handling the respective business logic.
 
 **Important Note**: In this example the same database cluster is utilized for all services. This is not a good practice, but is done for simplicity.
