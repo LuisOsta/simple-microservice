@@ -25,7 +25,7 @@ func getCollection() *mongo.Collection {
 	return db.Collection(COLLECTION_NAME)
 }
 
-func createProfile(address string, phone string, uid string) (ProfileDocument, error) {
+func CreateProfile(address string, phone string, uid string) (ProfileDocument, error) {
 
 	coll := getCollection()
 
@@ -51,7 +51,7 @@ type updatePayload struct {
 	Phone   string `bson:"phone,omitempty"`
 }
 
-func updateProfile(uid string, p updatePayload) (ProfileDocument, error) {
+func UpdateProfile(uid string, p updatePayload) (ProfileDocument, error) {
 	coll := getCollection()
 	var newProfile ProfileDocument
 	oid, err := primitive.ObjectIDFromHex(uid)

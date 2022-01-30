@@ -13,9 +13,11 @@ func ConfigureRouter() *gin.Engine {
 
 	router.Use(entrypoint.CheckRequestSignature)
 
-	router.POST("/", profile.HandleCreateProfile)
+	p := profile.Profile{CreateProfile: profile.CreateProfile, UpdateProfile: profile.UpdateProfile}
 
-	router.PUT("/:userId", profile.HandleUpdateProfile)
+	router.POST("/", p.HandleCreateProfile)
+
+	router.PUT("/:userId", p.HandleUpdateProfile)
 
 	return router
 }

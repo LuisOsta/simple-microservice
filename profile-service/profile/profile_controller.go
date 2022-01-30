@@ -13,7 +13,14 @@ type createProfileBody struct {
 	UserId  string `json:"userId"`
 }
 
-func HandleCreateProfile(c *gin.Context) {
+type ProfileCreator = func(address string, phone string, uid string) (ProfileDocument, error)
+type ProfileUpdator = func(uid string, p updatePayload) (ProfileDocument, error)
+type Profile struct {
+	CreateProfile ProfileCreator
+	UpdateProfile ProfileUpdator
+}
+
+func (p *Profile) HandleCreateProfile(c *gin.Context) {
 
 	var body createProfileBody
 	if err := c.BindJSON(&body); err != nil {
@@ -21,7 +28,7 @@ func HandleCreateProfile(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request"})
 		return
 	}
-	profile, err := createProfile(body.Address, body.Phone, body.UserId)
+	profile, err := p.CreateProfile(body.Address, body.Phone, body.UserId)
 
 	if err != nil {
 		log.Println(err)
@@ -38,7 +45,7 @@ type updateProfileBody struct {
 	Phone   string `json:"phone"`
 }
 
-func HandleUpdateProfile(c *gin.Context) {
+func (p *Profile) HandleUpdateProfile(c *gin.Context) {
 	uid := c.Param("userId")
 	var body updateProfileBody
 	if err := c.BindJSON(&body); err != nil {
@@ -46,7 +53,7 @@ func HandleUpdateProfile(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request"})
 		return
 	}
-	profile, err := updateProfile(uid, updatePayload(body))
+	profile, err := p.UpdateProfile(uid, updatePayload(body))
 
 	if err != nil {
 		log.Println(err)
