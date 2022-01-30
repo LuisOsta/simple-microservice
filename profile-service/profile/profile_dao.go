@@ -25,6 +25,8 @@ func getCollection() *mongo.Collection {
 	return db.Collection(COLLECTION_NAME)
 }
 
+// Creates the appropriate BSON document from the passed in parameter and sends it to the database.
+// Returns the newly created document.
 func CreateProfile(address string, phone string, uid string) (ProfileDocument, error) {
 
 	coll := getCollection()
@@ -51,6 +53,8 @@ type updatePayload struct {
 	Phone   string `bson:"phone,omitempty"`
 }
 
+// Queries the database for a profile with a matching userID, updates the document and returns the updated version.
+// Supports partial updates.
 func UpdateProfile(uid string, p updatePayload) (ProfileDocument, error) {
 	coll := getCollection()
 	var newProfile ProfileDocument
