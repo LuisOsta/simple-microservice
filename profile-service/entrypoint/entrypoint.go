@@ -13,10 +13,9 @@ import (
 func CheckRequestSignature(c *gin.Context) {
 	if c.Request.Host != config.GetConfiguration().ROUTER_HOST {
 		log.Println("Request originated from unauthorized host " + c.Request.Host)
-		c.JSON(http.StatusNotFound, gin.H{"error": "invalid request"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid request"})
 		c.Abort()
 	} else {
-		c.Request.Header.Set("Content-Type", "application/json; charset=utf-8")
-
+		c.Next()
 	}
 }
