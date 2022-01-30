@@ -11,7 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-const COLLECTION_NAME = "profile"
+const COLLECTION_NAME = "profiles"
 
 type ProfileDocument struct {
 	ID      primitive.ObjectID `bson:"_id,omitempty"`

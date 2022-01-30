@@ -8,6 +8,7 @@ import (
 type Configuration struct {
 	MONGO_URI   string
 	ROUTER_HOST string
+	DB_NAME     string
 }
 
 func GetConfiguration() Configuration {
@@ -17,11 +18,13 @@ func GetConfiguration() Configuration {
 		return Configuration{
 			MONGO_URI:   "mongodb://localhost:27017",
 			ROUTER_HOST: "localhost:5000",
+			DB_NAME:     "profile-service-test",
 		}
 	} else {
 		return Configuration{
 			MONGO_URI:   os.Getenv("MONGO_URI"),
 			ROUTER_HOST: os.Getenv("ROUTER_HOST"),
+			DB_NAME:     os.Getenv("DB_NAME"),
 		}
 	}
 

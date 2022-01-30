@@ -39,7 +39,7 @@ func InitializeDatabaseConnection() {
 	}
 
 	log.Println("Finished establishing connection to the database")
-	database = client.Database("test")
+	database = client.Database(config.GetConfiguration().DB_NAME)
 	globalClient = client
 }
 

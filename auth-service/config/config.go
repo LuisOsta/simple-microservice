@@ -9,6 +9,7 @@ type Configuration struct {
 	MONGO_URI             string
 	JWT_SECRET            string
 	USER_SERVICE_ENDPOINT string
+	DB_NAME               string
 }
 
 func GetConfiguration() Configuration {
@@ -19,12 +20,14 @@ func GetConfiguration() Configuration {
 			MONGO_URI:             "mongodb://localhost:27017",
 			JWT_SECRET:            "secret",
 			USER_SERVICE_ENDPOINT: "http://localhost:8080",
+			DB_NAME:               "auth-service-test",
 		}
 	} else {
 		return Configuration{
 			MONGO_URI:             os.Getenv("MONGO_URI"),
 			JWT_SECRET:            os.Getenv("JWT_SECRET"),
 			USER_SERVICE_ENDPOINT: os.Getenv("USER_SERVICE_ENDPOINT"),
+			DB_NAME:               os.Getenv("DB_NAME"),
 		}
 	}
 

@@ -10,7 +10,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-const COLLECTION_NAME = "auth"
+const COLLECTION_NAME = "credentials"
 
 type AuthDocument struct {
 	ID       primitive.ObjectID `bson:"_id,omitempty"`
