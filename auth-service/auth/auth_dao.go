@@ -23,7 +23,7 @@ func getCollection() *mongo.Collection {
 	return db.Collection(COLLECTION_NAME)
 }
 
-func getUserByCredentials(username string, password string) (AuthDocument, error) {
+func GetUserByCredentials(username string, password string) (AuthDocument, error) {
 
 	coll := getCollection()
 

@@ -29,6 +29,6 @@ func createProxyGroup(router *gin.Engine) {
 
 func createAuthGroup(router *gin.Engine) {
 	authGroup := router.Group("/auth")
-
-	authGroup.POST("/login", auth.HandleLogin)
+	a := auth.Auth{GetUserByCredentials: auth.GetUserByCredentials}
+	authGroup.POST("/login", a.HandleLogin)
 }
