@@ -21,6 +21,8 @@ func ConfigureRouter() *gin.Engine {
 	return router
 }
 
+// createProxyGroup has to use 'NoRoute' instead of 'Any' to register the Proxy handler of the non-auth routes due to limitations of the Gin router.
+// Its not able to handle complete wildcard routes and the auth routes at the same time.
 func createProxyGroup(router *gin.Engine) {
 	p := proxy.Proxy{SendServiceRequest: proxy.SendServiceRequest}
 	router.Use(auth.CheckAuthentication)

@@ -12,6 +12,7 @@ import (
 
 const AUTH_HEADER = "Authorization"
 
+// Uses the HS256 algorithm to generate a JWT token based on the userId and the JWT secret.
 func createAuthToken(uid string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"userId": uid,
@@ -23,6 +24,7 @@ func createAuthToken(uid string) (string, error) {
 	return tokenString, err
 }
 
+// The token should only be recognized as valid if it was generated with the correct algorithm and secret.
 func isTokenValid(tokenString string) bool {
 
 	_, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
